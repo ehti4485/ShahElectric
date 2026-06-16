@@ -23,12 +23,6 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Poppins', sans-serif; background: var(--white); color: var(--text); }
 
-    <iframe
- src="https://udify.app/chatbot/Qg24Tj9gWO93uY6z"
- style="width: 100%; height: 100%; min-height: 700px"
- frameborder="0"
- allow="microphone">
-</iframe>
 
     /* ─── NAV ─────────────────────────────────── */
     nav {
@@ -516,6 +510,40 @@
       .form-row { grid-template-columns: 1fr; }
       .contact-form { padding: 28px 20px; }
     }
+
+    <script>
+ window.difyChatbotConfig = {
+  token: 'Qg24Tj9gWO93uY6z',
+  inputs: {
+    // You can define the inputs from the Start node here
+    // key is the variable name
+    // e.g.
+    // name: "NAME"
+  },
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script>
+<script
+ src="https://udify.app/embed.min.js"
+ id="Qg24Tj9gWO93uY6z"
+ defer>
+</script>
+<style>
+  #dify-chatbot-bubble-button {
+    background-color: #1C64F2 !important;
+  }
+  #dify-chatbot-bubble-window {
+    width: 24rem !important;
+    height: 40rem !important;
+  }
+</style>
   </style>
 </head>
 <body>
