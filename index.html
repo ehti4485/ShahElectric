@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VoltEdge Power Distribution</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0A1628;
+      --navy2:  #0F2040;
+      --blue:   #1E3A5F;
+      --yellow: #FFD700;
+      --yellow2:#FFC107;
+      --gray:   #F5F7FA;
+      --text:   #1A2740;
+      --muted:  #6B7A90;
+      --white:  #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: var(--white); color: var(--text); }
+
+    /* ─── NAV ─────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      background: rgba(10,22,40,0.97);
+      backdrop-filter: blur(10px);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 70px;
+      border-bottom: 2px solid rgba(255,215,0,0.15);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+    }
+    .logo-text { color: var(--white); font-size: 1.35rem; font-weight: 700; letter-spacing: -0.5px; }
+    .logo-text span { color: var(--yellow); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none; font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--yellow); }
+
+    .nav-cta {
+      background: var(--yellow); color: var(--navy);
+      padding: 9px 22px; border-radius: 6px;
+      font-size: 0.85rem; font-weight: 700;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--yellow2); transform: translateY(-1px); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: white; transition: 0.3s; }
+
+    /* ─── PAGES ────────────────────────────────── */
+    .page { display: none; padding-top: 70px; }
+    .page.active { display: block; }
+
+    /* ─── HOME ─────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, var(--blue) 100%);
+      min-height: 100vh;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,215,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,215,0,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-glow {
+      position: absolute; top: -100px; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute; bottom: -150px; left: -150px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(30,58,95,0.6) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 1200px; margin: 0 auto;
+      padding: 80px 5%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.3);
+      color: var(--yellow); padding: 6px 16px; border-radius: 100px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+    .hero-badge::before { content: '⚡'; font-size: 0.9rem; }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 800; color: var(--white);
+      line-height: 1.15; margin-bottom: 20px;
+    }
+    .hero-title .accent { color: var(--yellow); }
+
+    .hero-desc {
+      color: rgba(255,255,255,0.7); font-size: 1rem;
+      line-height: 1.75; margin-bottom: 36px; max-width: 480px;
+    }
+
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--yellow); color: var(--navy);
+      padding: 14px 32px; border-radius: 8px;
+      font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; border: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+    }
+    .btn-primary:hover { background: var(--yellow2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,215,0,0.4); }
+
+    .btn-outline {
+      background: transparent; color: var(--white);
+      padding: 14px 32px; border-radius: 8px;
+      font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; border: 2px solid rgba(255,255,255,0.3);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+
+    /* Hero stats */
+    .hero-visual {
+      display: flex; flex-direction: column; gap: 20px; align-items: center;
+    }
+    .power-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 16px; padding: 30px;
+      width: 100%; max-width: 360px;
+      backdrop-filter: blur(8px);
+    }
+    .power-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .power-label { color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 500; }
+    .power-live {
+      display: flex; align-items: center; gap: 6px;
+      color: #4ade80; font-size: 0.75rem; font-weight: 600;
+    }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #4ade80;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+    .power-number { color: var(--white); font-size: 2.6rem; font-weight: 800; }
+    .power-unit { color: var(--yellow); font-size: 1rem; font-weight: 600; }
+    .power-bar-wrap { margin-top: 16px; }
+    .power-bar-label { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .power-bar-label span { color: rgba(255,255,255,0.5); font-size: 0.72rem; }
+    .power-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+    .power-bar-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--yellow), #ff9f00);
+      animation: fillBar 2s ease-out forwards;
+    }
+    @keyframes fillBar { from{width:0} to{width:87%} }
+
+    .stats-row { display: flex; gap: 12px; width: 100%; max-width: 360px; }
+    .stat-mini {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,215,0,0.15);
+      border-radius: 12px; padding: 18px 14px; text-align: center;
+    }
+    .stat-mini-num { color: var(--yellow); font-size: 1.5rem; font-weight: 800; }
+    .stat-mini-label { color: rgba(255,255,255,0.5); font-size: 0.7rem; margin-top: 4px; }
+
+    /* ─── BOLT DIVIDER ──────────────────────────── */
+    .bolt-divider {
+      text-align: center; padding: 20px 0 10px;
+      display: flex; align-items: center; gap: 16px;
+      max-width: 1200px; margin: 0 auto; padding: 30px 5%;
+    }
+    .bolt-divider::before, .bolt-divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent);
+    }
+    .bolt-icon { font-size: 1.6rem; color: var(--yellow); }
+
+    /* ─── STATS SECTION ────────────────────────── */
+    .stats-section {
+      background: var(--navy);
+      padding: 60px 5%;
+    }
+    .stats-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;
+    }
+    .stat-card {
+      text-align: center; padding: 40px 20px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,215,0,0.1);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .stat-card:hover { border-color: rgba(255,215,0,0.4); transform: translateY(-4px); }
+    .stat-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .stat-num { font-size: 2.8rem; font-weight: 800; color: var(--yellow); line-height: 1; }
+    .stat-plus { font-size: 1.8rem; }
+    .stat-desc { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 8px; }
+
+    /* ─── SERVICES ──────────────────────────────── */
+    .section {
+      padding: 90px 5%;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .section-tag {
+      color: var(--yellow); font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800;
+      color: var(--navy); line-height: 1.2; margin-bottom: 14px;
+    }
+    .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 540px; }
+
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 50px;
+    }
+    .service-card {
+      background: var(--white); border-radius: 16px;
+      border: 1px solid #E8ECF2;
+      padding: 36px 28px;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .service-card:hover {
+      border-color: var(--yellow);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    }
+    .service-icon-wrap {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem; margin-bottom: 20px;
+    }
+    .service-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--navy); }
+    .service-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+
+    /* ─── WHY US ────────────────────────────────── */
+    .why-section {
+      background: var(--gray); padding: 90px 5%;
+    }
+    .why-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+    .why-visual {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      border-radius: 24px; padding: 50px 40px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .why-feat {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 20px;
+      border-left: 3px solid var(--yellow);
+    }
+    .why-feat-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .why-feat-title { color: var(--white); font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+    .why-feat-desc { color: rgba(255,255,255,0.55); font-size: 0.82rem; line-height: 1.6; }
+
+    .why-points { display: flex; flex-direction: column; gap: 22px; margin-top: 32px; }
+    .why-point { display: flex; align-items: flex-start; gap: 14px; }
+    .check-circle {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--yellow), #ff9f00);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 0.75rem; font-weight: 700; color: var(--navy);
+    }
+    .why-point-text strong { display: block; font-size: 0.95rem; color: var(--navy); margin-bottom: 3px; }
+    .why-point-text p { color: var(--muted); font-size: 0.85rem; }
+
+    /* ─── TESTIMONIALS ──────────────────────────── */
+    .testi-section { padding: 90px 5%; background: var(--navy); }
+    .testi-inner { max-width: 1200px; margin: 0 auto; }
+    .testi-section .section-title { color: var(--white); }
+    .testi-section .section-sub { color: rgba(255,255,255,0.5); }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 50px; }
+    .testi-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.12);
+      border-radius: 16px; padding: 30px;
+    }
+    .testi-stars { color: var(--yellow); font-size: 0.85rem; margin-bottom: 14px; }
+    .testi-text { color: rgba(255,255,255,0.75); font-size: 0.88rem; line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--yellow), #ff9f00);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: var(--navy); font-size: 0.9rem;
+    }
+    .testi-name { color: var(--white); font-size: 0.88rem; font-weight: 600; }
+    .testi-loc { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
+
+    /* ─── FOOTER ────────────────────────────────── */
+    footer {
+      background: #060D1A; padding: 60px 5% 30px;
+      border-top: 1px solid rgba(255,215,0,0.08);
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 50px; margin-bottom: 50px; }
+    .footer-brand p { color: rgba(255,255,255,0.45); font-size: 0.85rem; line-height: 1.75; margin-top: 16px; }
+    .footer-col h4 { color: var(--white); font-size: 0.9rem; font-weight: 600; margin-bottom: 18px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { color: rgba(255,255,255,0.45); font-size: 0.83rem; text-decoration: none; cursor: pointer; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--yellow); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.07); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      color: rgba(255,255,255,0.3); font-size: 0.78rem;
+    }
+    .footer-bottom a { color: rgba(255,215,0,0.6); text-decoration: none; cursor: pointer; }
+    .footer-bottom a:hover { color: var(--yellow); }
+
+    /* ─── ABOUT US ──────────────────────────────── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      padding: 90px 5% 80px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,215,0,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(255,215,0,0.03) 1px,transparent 1px);
+      background-size: 50px 50px;
+    }
+    .page-hero-inner { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+    .page-hero h1 { color: var(--white); font-size: clamp(2rem,4vw,3rem); font-weight: 800; margin-bottom: 16px; }
+    .page-hero h1 span { color: var(--yellow); }
+    .page-hero p { color: rgba(255,255,255,0.65); font-size: 1rem; line-height: 1.75; }
+
+    .about-story {
+      padding: 90px 5%; max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start;
+    }
+    .about-story .section-title { margin-bottom: 20px; }
+    .about-story p { color: var(--muted); font-size: 0.92rem; line-height: 1.8; margin-bottom: 16px; }
+    .about-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+    .about-mini-card {
+      background: var(--gray); border-radius: 12px; padding: 22px 18px;
+      border-left: 3px solid var(--yellow);
+    }
+    .about-mini-card strong { color: var(--navy); font-size: 1.4rem; font-weight: 800; display: block; margin-bottom: 4px; }
+    .about-mini-card span { color: var(--muted); font-size: 0.78rem; }
+
+    .team-section { background: var(--gray); padding: 80px 5%; }
+    .team-inner { max-width: 1200px; margin: 0 auto; }
+    .team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; margin-top: 50px; }
+    .team-card {
+      background: var(--white); border-radius: 16px; padding: 30px 20px;
+      text-align: center; border: 1px solid #E8ECF2;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .team-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.07); }
+    .team-avatar {
+      width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 16px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; font-weight: 800; color: var(--yellow);
+      border: 3px solid rgba(255,215,0,0.3);
+    }
+    .team-name { font-size: 0.95rem; font-weight: 700; color: var(--navy); }
+    .team-role { color: var(--muted); font-size: 0.78rem; margin-top: 4px; }
+
+    .values-section { padding: 90px 5%; max-width: 1200px; margin: 0 auto; }
+    .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 50px; }
+    .value-card {
+      background: var(--white); border-radius: 16px; padding: 36px 28px;
+      border: 1px solid #E8ECF2; text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .value-card:hover { border-color: var(--yellow); transform: translateY(-4px); }
+    .value-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .value-title { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .value-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.7; }
+
+    /* ─── PRIVACY ───────────────────────────────── */
+    .privacy-body {
+      max-width: 820px; margin: 0 auto; padding: 80px 5%;
+    }
+    .privacy-body h2 { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin: 40px 0 12px; }
+    .privacy-body h2:first-child { margin-top: 0; }
+    .privacy-body p { color: var(--muted); font-size: 0.9rem; line-height: 1.85; margin-bottom: 14px; }
+    .privacy-body ul { padding-left: 20px; margin-bottom: 14px; }
+    .privacy-body ul li { color: var(--muted); font-size: 0.9rem; line-height: 1.85; margin-bottom: 6px; }
+    .privacy-body ul li::marker { color: var(--yellow); }
+    .privacy-updated {
+      display: inline-block; background: rgba(255,215,0,0.1); color: var(--yellow2);
+      border-radius: 6px; padding: 6px 14px; font-size: 0.78rem; font-weight: 600;
+      margin-bottom: 36px;
+    }
+
+    /* ─── CONTACT ───────────────────────────────── */
+    .contact-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px;
+      padding: 80px 5%;
+    }
+    .contact-info h3 { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+    .contact-info p { color: var(--muted); font-size: 0.9rem; line-height: 1.75; margin-bottom: 36px; }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px;
+    }
+    .contact-item-icon {
+      width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .contact-item strong { display: block; color: var(--navy); font-size: 0.88rem; margin-bottom: 3px; }
+    .contact-item span { color: var(--muted); font-size: 0.83rem; }
+
+    .contact-form {
+      background: var(--white); border-radius: 20px;
+      border: 1px solid #E8ECF2; padding: 44px 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    }
+    .contact-form h3 { font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .contact-form p { color: var(--muted); font-size: 0.85rem; margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; color: var(--navy); font-size: 0.82rem; font-weight: 600; margin-bottom: 7px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      background: var(--gray);
+      border: 1.5px solid #E8ECF2;
+      border-radius: 8px; padding: 12px 16px;
+      font-family: 'Poppins', sans-serif; font-size: 0.88rem; color: var(--text);
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--yellow2);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .submit-btn {
+      width: 100%; background: linear-gradient(135deg, var(--yellow), var(--yellow2));
+      color: var(--navy); padding: 14px;
+      border: none; border-radius: 8px;
+      font-family: 'Poppins', sans-serif; font-size: 0.92rem; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+    }
+    .submit-btn:hover { opacity: 0.92; transform: translateY(-2px); }
+
+    .success-msg {
+      display: none; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.4);
+      border-radius: 8px; padding: 14px 18px;
+      color: #166534; font-size: 0.88rem; font-weight: 500;
+      margin-top: 16px;
+    }
+
+    .map-section { background: var(--gray); padding: 70px 5%; text-align: center; }
+    .map-inner { max-width: 1200px; margin: 0 auto; }
+    .map-frame {
+      margin-top: 40px;
+      background: var(--navy); border-radius: 20px;
+      padding: 50px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,215,0,0.15); min-height: 220px;
+    }
+    .map-placeholder { text-align: center; }
+    .map-pin { font-size: 3rem; margin-bottom: 12px; }
+    .map-placeholder h4 { color: var(--white); font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+    .map-placeholder p { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+
+    /* ─── RESPONSIVE ────────────────────────────── */
+    @media(max-width: 968px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-btns { justify-content: center; }
+      .hero-visual { display: none; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .services-grid, .values-grid { grid-template-columns: 1fr 1fr; }
+      .why-inner, .about-story, .contact-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2,1fr); }
+      .testi-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 30px; }
+    }
+    @media(max-width: 600px) {
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; inset: 70px 0 0 0; background: var(--navy); padding: 30px; gap: 20px; z-index: 998; }
+      .hamburger { display: flex; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .services-grid, .values-grid, .team-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────── -->
+<nav>
+  <a class="logo" onclick="showPage('home')">
+    <svg class="logo-icon" viewBox="0 0 38 38" fill="none">
+      <circle cx="19" cy="19" r="19" fill="#FFD700" opacity="0.15"/>
+      <path d="M22 4L10 21h9l-3 13L29 17h-9L22 4z" fill="#FFD700"/>
+    </svg>
+    <span class="logo-text">Volt<span>Edge</span></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('about')">About Us</a>
+    <a onclick="showPage('privacy')">Privacy Policy</a>
+    <a onclick="showPage('contact')">Contact Us</a>
+  </ul>
+  <button class="nav-cta" onclick="showPage('contact')">Report Outage</button>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     HOME PAGE
+════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">Serving 1,000+ Homes Since 2005</div>
+        <h1 class="hero-title">Powering <span class="accent">Every Home.</span><br>Every Day.</h1>
+        <p class="hero-desc">VoltEdge Power Distribution delivers reliable, safe, and affordable electricity to over 1,000 households across our region — keeping your lights on 24/7, 365 days a year.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('contact')">Report an Outage</button>
+          <button class="btn-outline" onclick="showPage('about')">Learn More</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="power-card">
+          <div class="power-card-header">
+            <span class="power-label">Current Load Distribution</span>
+            <span class="power-live"><span class="live-dot"></span>Live</span>
+          </div>
+          <div class="power-number">2.4 <span class="power-unit">MW</span></div>
+          <div class="power-bar-wrap">
+            <div class="power-bar-label"><span>Capacity Used</span><span>87%</span></div>
+            <div class="power-bar"><div class="power-bar-fill"></div></div>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-mini">
+            <div class="stat-mini-num">1,020</div>
+            <div class="stat-mini-label">Homes Connected</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-num">99.6%</div>
+            <div class="stat-mini-label">Uptime This Month</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🏠</div>
+        <div class="stat-num">1,000<span class="stat-plus">+</span></div>
+        <div class="stat-desc">Homes Powered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-num">99.6<span style="font-size:1.4rem">%</span></div>
+        <div class="stat-desc">Grid Uptime</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🛠️</div>
+        <div class="stat-num">24<span style="font-size:1.4rem">/7</span></div>
+        <div class="stat-desc">Technical Support</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-num">18<span style="font-size:1.4rem">+</span></div>
+        <div class="stat-desc">Years of Service</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <div style="background:var(--white)">
+    <div class="section">
+      <div class="section-tag">⚡ What We Do</div>
+      <h2 class="section-title">Comprehensive Power<br>Distribution Services</h2>
+      <p class="section-sub">From metering and maintenance to emergency response — we handle every aspect of your electricity needs.</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon-wrap">🔌</div>
+          <div class="service-title">Residential Connections</div>
+          <div class="service-desc">Safe and properly metered electricity connections for all residential properties within our distribution zone.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon-wrap">🛡️</div>
+          <div class="service-title">Grid Maintenance</div>
+          <div class="service-desc">Proactive maintenance of transformers, poles, cables, and switching gear to minimize downtime for all customers.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon-wrap">📊</div>
+          <div class="service-title">Smart Metering</div>
+          <div class="service-desc">Accurate digital meter reading and transparent monthly billing with consumption history for every household.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon-wrap">🚨</div>
+          <div class="service-title">Emergency Response</div>
+          <div class="service-desc">Rapid-response teams available around the clock to address faults, outages, and hazardous situations immediately.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon-wrap">🌱</div>
+          <div class="service-title">Energy Efficiency</div>
+          <div class="service-desc">Free guidance and tips for households to reduce consumption and lower their monthly electricity bills.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon-wrap">📞</div>
+          <div class="service-title">Customer Support</div>
+          <div class="service-desc">Dedicated helpline and walk-in service center for billing queries, connection requests, and complaints.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Us -->
+  <section class="why-section">
+    <div class="why-inner">
+      <div>
+        <div class="section-tag">⚡ Why Choose Us</div>
+        <h2 class="section-title">Trusted by Over 1,000 Families</h2>
+        <p class="section-sub">We are more than just a utility — we are your neighborhood's power backbone, committed to reliability, safety, and transparency.</p>
+        <div class="why-points">
+          <div class="why-point">
+            <div class="check-circle">✓</div>
+            <div class="why-point-text">
+              <strong>Fastest Fault Restoration</strong>
+              <p>Average fault resolution time of under 3 hours, ensuring minimal disruption to your home.</p>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="check-circle">✓</div>
+            <div class="why-point-text">
+              <strong>Transparent Billing</strong>
+              <p>Clear, itemized monthly bills with no hidden charges. Dispute resolution within 48 hours.</p>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="check-circle">✓</div>
+            <div class="why-point-text">
+              <strong>Safety-First Approach</strong>
+              <p>All installations and maintenance follow national electrical safety standards (WAPDA-compliant).</p>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="check-circle">✓</div>
+            <div class="why-point-text">
+              <strong>Locally Operated</strong>
+              <p>Our team lives in the same community we serve — your problem is our problem.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="why-visual">
+        <div class="why-feat">
+          <div class="why-feat-icon">⚡</div>
+          <div>
+            <div class="why-feat-title">24/7 Control Room Monitoring</div>
+            <div class="why-feat-desc">Our dedicated control room monitors the entire grid in real time, detecting faults before you even notice them.</div>
+          </div>
+        </div>
+        <div class="why-feat">
+          <div class="why-feat-icon">🔧</div>
+          <div>
+            <div class="why-feat-title">Certified Field Engineers</div>
+            <div class="why-feat-desc">All field technicians hold national electrical certifications and undergo bi-annual safety training.</div>
+          </div>
+        </div>
+        <div class="why-feat">
+          <div class="why-feat-icon">📱</div>
+          <div>
+            <div class="why-feat-title">Easy Outage Reporting</div>
+            <div class="why-feat-desc">Report any issue via phone, WhatsApp, or our website — and get a confirmed resolution timeframe within minutes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testi-section">
+    <div class="testi-inner">
+      <div class="section-tag">⚡ Testimonials</div>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-sub">Real feedback from real households in our network.</p>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"Whenever there's a fault, the team shows up within two hours. That kind of speed and professionalism is rare. Very happy with the service."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div><div class="testi-name">Ahmed Raza</div><div class="testi-loc">Block C, Sector 5</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"The billing is so transparent — I can see exactly what I consumed each month. No surprises, no overcharging. Highly recommend VoltEdge."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">S</div>
+            <div><div class="testi-name">Sana Mirza</div><div class="testi-loc">Green View Colony</div></div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★☆</div>
+          <p class="testi-text">"They resolved our connection issue in less than 24 hours. The staff was very polite and professional. Great experience overall."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">K</div>
+            <div><div class="testi-name">Kamran Sheikh</div><div class="testi-loc">Farooq Town</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section style="background:linear-gradient(135deg,var(--yellow),#ff9f00);padding:70px 5%;text-align:center;">
+    <h2 style="font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;color:var(--navy);margin-bottom:12px;">Have a Power Issue Right Now?</h2>
+    <p style="color:rgba(10,22,40,0.7);font-size:1rem;margin-bottom:28px;">Our team is available 24 hours a day, 7 days a week to help you.</p>
+    <button class="btn-primary" onclick="showPage('contact')" style="background:var(--navy);color:var(--yellow);box-shadow:0 4px 20px rgba(0,0,0,0.2);">Contact Us Now</button>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="logo" onclick="showPage('home')">
+            <svg width="30" height="30" viewBox="0 0 38 38" fill="none"><circle cx="19" cy="19" r="19" fill="#FFD700" opacity="0.15"/><path d="M22 4L10 21h9l-3 13L29 17h-9L22 4z" fill="#FFD700"/></svg>
+            <span class="logo-text">Volt<span>Edge</span></span>
+          </a>
+          <p>Reliable electricity distribution for over 1,000 homes. Serving our community with safety, transparency, and 24/7 dedication since 2005.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a onclick="showPage('home')">Home</a></li>
+            <li><a onclick="showPage('about')">About Us</a></li>
+            <li><a onclick="showPage('privacy')">Privacy Policy</a></li>
+            <li><a onclick="showPage('contact')">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a>New Connection</a></li>
+            <li><a>Bill Payment</a></li>
+            <li><a>Fault Reporting</a></li>
+            <li><a>Meter Reading</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a>📞 0300-1234567</a></li>
+            <li><a>✉️ info@voltedge.pk</a></li>
+            <li><a>📍 Office, Main Road</a></li>
+            <li><a>🕐 24/7 Emergency Line</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 VoltEdge Power Distribution. All rights reserved.</span>
+        <span><a onclick="showPage('privacy')">Privacy Policy</a></span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════
+     ABOUT US PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-tag" style="color:var(--yellow);justify-content:center;display:flex;">⚡ Our Story</div>
+      <h1>About <span>VoltEdge</span> Power</h1>
+      <p>Lighting up homes and lives for over 18 years. We are a locally owned electricity distribution company committed to keeping over 1,000 families powered, safe, and informed.</p>
+    </div>
+  </div>
+
+  <div class="about-story">
+    <div>
+      <div class="section-tag">⚡ Who We Are</div>
+      <h2 class="section-title">More Than a Utility — We Are Your Neighbors</h2>
+      <p>VoltEdge Power Distribution was established in 2005 with a single mission: to provide affordable and reliable electricity to underserved residential communities. What began as a small operation covering a few streets has grown into a full-scale distribution network serving over 1,000 homes.</p>
+      <p>We are a privately managed electricity distributor operating under applicable national regulatory frameworks. Our team of certified engineers, meter readers, field technicians, and customer service staff work together every single day to ensure uninterrupted power supply to every connected household.</p>
+      <p>Unlike large utility corporations, we operate locally — which means faster response times, direct accountability, and a genuine connection to the people we serve. Every complaint matters. Every outage is urgent. Every customer is known to us by name, not just by a meter number.</p>
+    </div>
+    <div>
+      <div class="about-card-grid">
+        <div class="about-mini-card"><strong>2005</strong><span>Year Established</span></div>
+        <div class="about-mini-card"><strong>1,020+</strong><span>Homes Connected</span></div>
+        <div class="about-mini-card"><strong>45+</strong><span>Staff Members</span></div>
+        <div class="about-mini-card"><strong>99.6%</strong><span>Uptime Record</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team -->
+  <section class="team-section">
+    <div class="team-inner">
+      <div class="section-tag">⚡ Our People</div>
+      <h2 class="section-title">The Team Behind Your Power</h2>
+      <p class="section-sub">Our experienced team of professionals ensures your electricity never stops.</p>
+      <div class="team-grid">
+        <div class="team-card"><div class="team-avatar">M</div><div class="team-name">Muhammad Tariq</div><div class="team-role">Chief Executive Officer</div></div>
+        <div class="team-card"><div class="team-avatar">A</div><div class="team-name">Asif Mahmood</div><div class="team-role">Chief Engineer</div></div>
+        <div class="team-card"><div class="team-avatar">F</div><div class="team-name">Faiza Khan</div><div class="team-role">Customer Relations Head</div></div>
+        <div class="team-card"><div class="team-avatar">Z</div><div class="team-name">Zubair Ahmed</div><div class="team-role">Grid Operations Manager</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <div class="values-section">
+    <div class="section-tag">⚡ Our Values</div>
+    <h2 class="section-title">What We Stand For</h2>
+    <p class="section-sub">Three core values guide every decision we make — from infrastructure investment to customer interactions.</p>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🔒</div>
+        <div class="value-title">Safety First</div>
+        <div class="value-desc">Every installation, repair, and maintenance task follows strict national safety codes. We never compromise on the physical safety of our customers or staff.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">📋</div>
+        <div class="value-title">Full Transparency</div>
+        <div class="value-desc">Clear billing, honest communication, and open access to your consumption data. We believe informed customers are empowered customers.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🤝</div>
+        <div class="value-title">Community Commitment</div>
+        <div class="value-desc">We are part of this neighborhood. We invest back into the infrastructure, support local employment, and treat every resident with dignity and respect.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer (repeated) -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom" style="border-top:1px solid rgba(255,255,255,0.07);padding-top:24px;">
+        <span style="color:rgba(255,255,255,0.3);font-size:0.78rem">© 2024 VoltEdge Power Distribution. All rights reserved.</span>
+        <a onclick="showPage('privacy')" style="color:rgba(255,215,0,0.6);font-size:0.78rem;cursor:pointer;">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════
+     PRIVACY POLICY PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-privacy">
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-tag" style="color:var(--yellow);justify-content:center;display:flex;">⚡ Legal</div>
+      <h1>Privacy <span>Policy</span></h1>
+      <p>We are committed to protecting your personal information. This policy explains what data we collect, why we collect it, and how we keep it safe.</p>
+    </div>
+  </div>
+
+  <div class="privacy-body">
+    <span class="privacy-updated">Last Updated: January 1, 2024</span>
+
+    <h2>1. Introduction</h2>
+    <p>VoltEdge Power Distribution ("we," "our," or "the Company") is committed to protecting the privacy and personal information of our customers. This Privacy Policy applies to all customers, visitors to our website, and individuals who interact with our services.</p>
+
+    <h2>2. Information We Collect</h2>
+    <p>To provide electricity distribution services effectively, we collect the following types of information:</p>
+    <ul>
+      <li><strong>Personal Identification:</strong> Full name, CNIC number, address, phone number, and email address of the primary account holder.</li>
+      <li><strong>Property Information:</strong> Physical address of the connected property, meter number, and connection type.</li>
+      <li><strong>Consumption Data:</strong> Monthly electricity meter readings, usage history, and load patterns.</li>
+      <li><strong>Billing Information:</strong> Payment history, outstanding amounts, and billing cycle data. We do not store credit/debit card details.</li>
+      <li><strong>Communication Records:</strong> Records of complaints, fault reports, and service requests submitted by customers.</li>
+      <li><strong>Website Data:</strong> If you use our website, we may collect standard web analytics data such as browser type, pages visited, and time spent — via cookies.</li>
+    </ul>
+
+    <h2>3. How We Use Your Information</h2>
+    <p>Your information is used solely for the purposes of providing and improving our electricity distribution service, including:</p>
+    <ul>
+      <li>Processing your monthly electricity bill accurately</li>
+      <li>Responding to outage reports, complaints, and service requests</li>
+      <li>Maintaining accurate records for regulatory compliance</li>
+      <li>Notifying you of planned maintenance or service interruptions</li>
+      <li>Improving our infrastructure and service quality</li>
+    </ul>
+
+    <h2>4. Data Sharing & Disclosure</h2>
+    <p>We do not sell, rent, or trade your personal information to any third party. Your data may only be shared in the following limited circumstances:</p>
+    <ul>
+      <li>With regulatory authorities (e.g., NEPRA, WAPDA) as required by applicable law</li>
+      <li>With authorized contractors who assist in maintenance or metering — bound by strict confidentiality agreements</li>
+      <li>When legally required by a court order or government authority</li>
+    </ul>
+
+    <h2>5. Data Security</h2>
+    <p>We take the security of your personal data seriously. All customer records are stored in secured systems with access restricted to authorized personnel only. Physical records are kept in locked premises. We review our security practices regularly.</p>
+    <p>However, no method of data storage or transmission is 100% secure. While we strive to protect your information, we cannot guarantee absolute security.</p>
+
+    <h2>6. Your Rights</h2>
+    <p>As a customer of VoltEdge Power Distribution, you have the following rights regarding your personal data:</p>
+    <ul>
+      <li>The right to access your personal information held by us</li>
+      <li>The right to request corrections to inaccurate information</li>
+      <li>The right to request deletion of your data upon termination of service (subject to legal retention requirements)</li>
+      <li>The right to raise a complaint about how your data is handled</li>
+    </ul>
+
+    <h2>7. Cookies</h2>
+    <p>Our website uses basic cookies to improve your browsing experience. These cookies do not collect personal information and are used purely for functional and analytical purposes. You may disable cookies in your browser settings, though some features of our website may not function correctly.</p>
+
+    <h2>8. Data Retention</h2>
+    <p>Customer records including billing history and personal data are retained for a minimum of 7 years in accordance with applicable tax and regulatory requirements. After this period, records are securely destroyed.</p>
+
+    <h2>9. Changes to This Policy</h2>
+    <p>We reserve the right to update this Privacy Policy at any time. Any material changes will be communicated to active customers via written notice or posting on our office notice board. Continued use of our services after changes implies acceptance of the updated policy.</p>
+
+    <h2>10. Contact Us</h2>
+    <p>If you have any questions or concerns about this Privacy Policy or how your data is handled, please contact our Customer Relations team:</p>
+    <ul>
+      <li>📞 Phone: 0300-1234567</li>
+      <li>✉️ Email: privacy@voltedge.pk</li>
+      <li>📍 Office: Main Distribution Office, [Your Area], Pakistan</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <span style="color:rgba(255,255,255,0.3);font-size:0.78rem">© 2024 VoltEdge Power Distribution. All rights reserved.</span>
+        <a onclick="showPage('home')" style="color:rgba(255,215,0,0.6);font-size:0.78rem;cursor:pointer;">Back to Home</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════
+     CONTACT US PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-tag" style="color:var(--yellow);justify-content:center;display:flex;">⚡ Get In Touch</div>
+      <h1>Contact <span>Us</span></h1>
+      <p>Whether you want to report a fault, ask about billing, or request a new connection — our team is ready to help you 24 hours a day, 7 days a week.</p>
+    </div>
+  </div>
+
+  <div class="contact-grid">
+    <!-- Info Side -->
+    <div class="contact-info">
+      <h3>How Can We Help?</h3>
+      <p>Reach out to us through any of the channels below. For emergencies, please call our 24/7 hotline directly.</p>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div>
+          <strong>Phone / WhatsApp</strong>
+          <span>0300-1234567 (24/7 Emergency Line)<br>051-1234567 (Office Hours: 9am – 5pm)</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <div>
+          <strong>Email</strong>
+          <span>info@voltedge.pk<br>billing@voltedge.pk</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div>
+          <strong>Office Address</strong>
+          <span>Main Distribution Office<br>[Your Street], [Your Area], Pakistan</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div>
+          <strong>Office Hours</strong>
+          <span>Monday – Saturday: 9:00 AM – 5:00 PM<br>Emergency Line: 24 Hours / 7 Days</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Side -->
+    <div class="contact-form">
+      <h3>Send Us a Message</h3>
+      <p>Fill in the form below and we'll get back to you within 24 hours.</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="fname" placeholder="Your full name"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="fphone" placeholder="03XX-XXXXXXX"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="femail" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>Subject *</label>
+        <select id="fsubject">
+          <option value="">— Select a topic —</option>
+          <option>Report Power Outage / Fault</option>
+          <option>Billing Query</option>
+          <option>New Connection Request</option>
+          <option>Meter Reading Issue</option>
+          <option>Complaint / Feedback</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Your Message *</label>
+        <textarea id="fmessage" placeholder="Please describe your issue or query in detail…"></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitForm()">⚡ Send Message</button>
+      <div class="success-msg" id="successMsg">✅ Your message has been received! Our team will contact you within 24 hours.</div>
+    </div>
+  </div>
+
+  <!-- Map placeholder -->
+  <section class="map-section">
+    <div class="map-inner">
+      <div class="section-tag">⚡ Find Us</div>
+      <h2 class="section-title">Our Office Location</h2>
+      <p class="section-sub">Visit us during office hours for in-person assistance with connections, billing, or complaints.</p>
+      <div class="map-frame">
+        <div class="map-placeholder">
+          <div class="map-pin">📍</div>
+          <h4>VoltEdge Power Distribution Office</h4>
+          <p>Main Distribution Office, [Your Area], Pakistan<br><br>
+          <span style="color:var(--yellow);font-size:0.8rem;">Replace this section with an embedded Google Maps iframe for your actual address.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <span style="color:rgba(255,255,255,0.3);font-size:0.78rem">© 2024 VoltEdge Power Distribution. All rights reserved.</span>
+        <a onclick="showPage('privacy')" style="color:rgba(255,215,0,0.6);font-size:0.78rem;cursor:pointer;">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ─── SCRIPTS ──────────────────────── -->
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // close mobile nav
+    document.getElementById('navLinks').classList.remove('open');
+  }
+
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  function submitForm() {
+    const name = document.getElementById('fname').value.trim();
+    const phone = document.getElementById('fphone').value.trim();
+    const subject = document.getElementById('fsubject').value;
+    const msg = document.getElementById('fmessage').value.trim();
+    if (!name || !phone || !subject || !msg) {
+      alert('Please fill in all required fields marked with *');
+      return;
+    }
+    const successEl = document.getElementById('successMsg');
+    successEl.style.display = 'block';
+    document.getElementById('fname').value = '';
+    document.getElementById('fphone').value = '';
+    document.getElementById('femail').value = '';
+    document.getElementById('fsubject').value = '';
+    document.getElementById('fmessage').value = '';
+    setTimeout(() => { successEl.style.display = 'none'; }, 6000);
+  }
+</script>
+</body>
+</html>
